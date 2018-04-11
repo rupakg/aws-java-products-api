@@ -1,5 +1,9 @@
 # Serverless REST API in Java/Maven using DynamoDB
 
+
+![image](https://user-images.githubusercontent.com/8188/38645675-ec708d0e-3db2-11e8-8f8b-a4a37ed612b9.png)
+
+
 The sample serverless service will create a REST API for products. It will be deployed to AWS. The data will be stored in a DynamoDB table.
 
 This is a companion app for the blog post [REST API in Java using DynamoDB and Serverless]().
