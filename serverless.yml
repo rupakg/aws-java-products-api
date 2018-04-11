@@ -1,0 +1,85 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: products-api
+
+custom:
+  productsTableName: 'java-products-${self:provider.stage}'
+
+provider:
+  name: aws
+  runtime: java8
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["ProductsDynamoDBTable", "Arn" ] }
+  environment:
+    PRODUCTS_TABLE_NAME: ${self:custom.productsTableName}
+
+package:
+  artifact: 'target/${self:service}-${self:provider.stage}.jar'
+
+functions:
+  listProducts:
+    handler: com.serverless.ListProductsHandler
+    events:
+      - http:
+          path: /products
+          method: get
+  getProduct:
+    handler: com.serverless.GetProductHandler
+    events:
+      - http:
+          path: /products/{id}
+          method: get
+  createProduct:
+    handler: com.serverless.CreateProductHandler
+    events:
+      - http:
+          path: /products
+          method: post
+  deleteProduct:
+    handler: com.serverless.DeleteProductHandler
+    events:
+      - http:
+          path: /products/{id}
+          method: delete
+
+resources:
+  Resources:
+    ProductsDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.productsTableName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: name
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
