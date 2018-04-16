@@ -6,7 +6,7 @@
 
 The sample serverless service will create a REST API for products. It will be deployed to AWS. The data will be stored in a DynamoDB table.
 
-This is a companion app for the blog post [REST API in Java using DynamoDB and Serverless]().
+This is a companion app for the blog post [REST API in Java using DynamoDB and Serverless](https://serverless.com/blog/how-to-create-a-rest-api-in-java-using-dynamodb-and-serverless/).
 
 ## Install Pre-requisites
 
